@@ -79,8 +79,11 @@ function singleArgumentMathMethods(mode) {
     const kernel = gpu.createKernel(`function(value) {
       return Math.${method}(value);
     }`, { output: [1] });
-    for (let j = 0; j < 10; j++) {
-      assert.equal(kernel(j / 10)[0].toFixed(3), Math[method](j / 10).toFixed(3), `Math.${method}(${j / 10})`);
+    for (let j = -5; j <= 5; j++) {
+      const v = j;
+      const v2 = j / 5;
+      assert.equal(kernel(v)[0].toFixed(3), Math[method](v).toFixed(3), `Math.${method}(${v})`);
+      assert.equal(kernel(v2)[0].toFixed(3), Math[method](v2).toFixed(3), `Math.${method}(${v2})`);
     }
   }
   gpu.destroy();
@@ -125,10 +128,10 @@ function twoArgumentMathMethods(mode) {
     const kernel = gpu.createKernel(`function(value1, value2) {
       return Math.${method}(value1, value2);
     }`, { output: [1] });
-    for (let j = 0; j < 10; j++) {
-      const value1 = j / 10;
-      const value2 = value1;
-      assert.equal(kernel(value1, value2)[0].toFixed(3), Math[method](value1, value2).toFixed(3), `Math.${method}(${value1}, ${value2})`);
+    for (let j = -5; j < 5; j++) {
+      for (let k = -5; k < 5; k++) {
+        assert.equal(kernel(j, k)[0].toFixed(3), Math[method](j, k).toFixed(3), `Math.${method}(${j}, ${k})`);
+      }
     }
   }
   gpu.destroy();

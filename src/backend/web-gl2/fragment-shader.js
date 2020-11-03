@@ -13,9 +13,16 @@ __CONSTANTS__;
 
 in vec2 vTexCoord;
 
-float atan2(float v1, float v2) {
-  if (v1 == 0.0 || v2 == 0.0) return 0.0;
-  return atan(v1 / v2);
+float atan2(float y, float x) {
+  if (x > 0.0) {
+    return 2.0 * atan(y / (sqrt(x * x + y * y) + x));
+  } else if (x <= 0.0 && y != 0.0) {
+    return 2.0 * atan((sqrt(x * x + y * y) - x) / y);
+  } else if (x < 0.0 && y == 0.0) {
+    return ${Math.PI};
+  } else {
+    return 0.0;
+  }
 }
 
 float cbrt(float x) {
